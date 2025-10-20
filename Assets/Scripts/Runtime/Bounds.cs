@@ -23,12 +23,12 @@ namespace NewKris.Runtime {
         private void OnDrawGizmos() {
             Gizmos.color = Color.white;
             
-            Vector2 p1 = new Vector2(-100, maxHeight);
-            Vector2 p2 = new Vector2(100, maxHeight);
+            Vector2 p1 = new Vector2(int.MinValue, maxHeight);
+            Vector2 p2 = new Vector2(int.MaxValue, maxHeight);
             Gizmos.DrawLine(p1, p2);
             
-            Vector2 p3 = new Vector2(-100, minHeight);
-            Vector2 p4 = new Vector2(100, minHeight);
+            Vector2 p3 = new Vector2(int.MinValue, minHeight);
+            Vector2 p4 = new Vector2(int.MaxValue, minHeight);
             Gizmos.DrawLine(p3, p4);
         }
     }
