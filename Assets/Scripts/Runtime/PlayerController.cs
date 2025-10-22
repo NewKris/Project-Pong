@@ -5,5 +5,6 @@ using UnityEngine.InputSystem;
 
 namespace NewKris.Runtime {
     public class PlayerController : NetworkBehaviour {
+        public static event Action<PlayerController> OnPlayerSpawned;
     }
 }
