@@ -12,6 +12,11 @@ namespace NewKris.Runtime.PongClient {
 
         private PlayerPawn _pawn;
 
+        [Rpc(SendTo.Everyone)]
+        public void SetMobilityRpc(bool canMove) {
+            _pawn.enabled = canMove;
+        }
+        
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
             
@@ -25,7 +30,15 @@ namespace NewKris.Runtime.PongClient {
                 NotifySpawn();
             });
         }
-        
+
+        public override void OnNetworkDespawn() {
+            base.OnNetworkDespawn();
+            
+            DoOnServer(() => {
+                Players.Clear();
+            });
+        }
+
         public void ReceiveMoveInput(InputAction.CallbackContext context) {
             UpdateMovementInputRpc(context.ReadValue<float>());
         }

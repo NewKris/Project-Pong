@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using NewKris.Runtime.Common;
 using NewKris.Runtime.PongClient;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace NewKris.Runtime.PongServer {
     public class GameManager : NetworkBehaviourExtended {
         public Transform player1Spawn;
         public Transform player2Spawn;
+        public Ball ball;
+        public float countDownDuration;
 
         private bool _gameInProgress;
-        private List<PlayerController> _registeredPlayers = new List<PlayerController>(2);
+        private readonly List<PlayerController> _registeredPlayers = new List<PlayerController>(2);
         
         public override void OnNetworkSpawn() {
             DoOnServer(() => {
@@ -52,9 +55,22 @@ namespace NewKris.Runtime.PongServer {
         private IEnumerator RunStartSequence() {
             _gameInProgress = true;
             
+            foreach (PlayerController registeredPlayer in _registeredPlayers) {
+                PositionPlayer(registeredPlayer);
+                registeredPlayer.SetMobilityRpc(false);
+            }
+            
+            ball.ResetPosition();
+            
             yield return CountDown();
             
-            StartGame();
+            foreach (PlayerController registeredPlayer in _registeredPlayers) {
+                registeredPlayer.SetMobilityRpc(true);
+            }
+            
+            ball.Putt(new Vector2(1, 1));
+            
+            Debug.Log("Go!");
         }
         
         private void PositionPlayer(PlayerController player) {
@@ -66,12 +82,20 @@ namespace NewKris.Runtime.PongServer {
             }
         }
 
-        private void StartGame() {
-            Debug.Log("Game Start");
-        }
-
         private IEnumerator CountDown() {
-            yield break;
+            float t = 0;
+            float lastSecond = -0.5f;
+            
+            while (t < countDownDuration) {
+                t += Time.deltaTime;
+
+                if (Mathf.Floor(t) > lastSecond) {
+                    lastSecond += 1;
+                    Debug.Log(Mathf.Floor(t));
+                }
+                
+                yield return null;
+            }
         }
         
         private void OnDrawGizmos() {
