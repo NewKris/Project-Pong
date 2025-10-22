@@ -19,10 +19,6 @@ namespace NewKris.Runtime.PongServer {
                 PlayerController.OnPlayerSpawned += RegisterPlayer;
                 RegisterExistingPlayers();
             });
-            
-            DoOnClient(() => {
-                gameObject.SetActive(false);
-            });
         }
 
         public override void OnNetworkDespawn() {
@@ -34,7 +30,7 @@ namespace NewKris.Runtime.PongServer {
         }
 
         private void RegisterExistingPlayers() {
-            foreach (PlayerController playerController in PlayerController.players) {
+            foreach (PlayerController playerController in PlayerController.Players) {
                 RegisterPlayer(playerController);
             }
         }
@@ -71,7 +67,7 @@ namespace NewKris.Runtime.PongServer {
         }
 
         private void StartGame() {
-            
+            Debug.Log("Game Start");
         }
 
         private IEnumerator CountDown() {

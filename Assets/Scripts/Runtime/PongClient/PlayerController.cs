@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace NewKris.Runtime.PongClient {
     public class PlayerController : NetworkBehaviourExtended {
         public static event Action<PlayerController> OnPlayerSpawned;
-        public static List<PlayerController> players = new List<PlayerController>(2);
+        public static readonly List<PlayerController> Players = new List<PlayerController>(2);
 
         private PlayerPawn _pawn;
 
@@ -18,10 +18,12 @@ namespace NewKris.Runtime.PongClient {
             DoOnAll(() => {
                 _pawn = gameObject.GetComponent<PlayerPawn>();
                 SetPlayerName();
-                players.Add(this);
             });
 
-            DoOnOwner(NotifySpawnRpc);
+            DoOnServer(() => {
+                Players.Add(this);
+                NotifySpawn();
+            });
         }
         
         public void ReceiveMoveInput(InputAction.CallbackContext context) {
@@ -35,15 +37,14 @@ namespace NewKris.Runtime.PongClient {
             
             gameObject.name = $"{currentMode} Player";
         }
+
+        private void NotifySpawn() {
+            OnPlayerSpawned?.Invoke(this);
+        }
         
         [Rpc(SendTo.Server)]
         private void UpdateMovementInputRpc(float movementInput) {
             _pawn.MovementInput = movementInput;
-        }
-
-        [Rpc(SendTo.Server)]
-        private void NotifySpawnRpc() {
-            OnPlayerSpawned?.Invoke(this);
         }
     }
 }
