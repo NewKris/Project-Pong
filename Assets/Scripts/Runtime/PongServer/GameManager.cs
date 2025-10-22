@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NewKris.Runtime.Common;
@@ -6,21 +7,20 @@ using Unity.Netcode;
 using UnityEngine;
 
 namespace NewKris.Runtime.PongServer {
-    public class GameManager : NetworkBehaviour {
+    public class GameManager : NetworkBehaviourExtended {
         public Transform player1Spawn;
         public Transform player2Spawn;
 
         private bool _gameInProgress;
-        private List<PlayerController> _players = new List<PlayerController>(2);
+        private List<PlayerController> _registeredPlayers = new List<PlayerController>(2);
         
         public override void OnNetworkSpawn() {
-            base.OnNetworkSpawn();
-            
-            NetworkAction.DoOnServer(this, () => {
+            DoOnServer(() => {
                 PlayerController.OnPlayerSpawned += RegisterPlayer;
+                RegisterExistingPlayers();
             });
             
-            NetworkAction.DoOnClient(this, () => {
+            DoOnClient(() => {
                 gameObject.SetActive(false);
             });
         }
@@ -28,19 +28,25 @@ namespace NewKris.Runtime.PongServer {
         public override void OnNetworkDespawn() {
             base.OnNetworkDespawn();
             
-            NetworkAction.DoOnServer(this, () => {
+            DoOnServer(() => {
                 PlayerController.OnPlayerSpawned -= RegisterPlayer;
             });
         }
 
+        private void RegisterExistingPlayers() {
+            foreach (PlayerController playerController in PlayerController.players) {
+                RegisterPlayer(playerController);
+            }
+        }
+        
         private void RegisterPlayer(PlayerController player) {
-            _players.Add(player);
+            _registeredPlayers.Add(player);
             PositionPlayer(player);
             TryStartGame();
         }
         
         private void TryStartGame() {
-            if (_gameInProgress || _players.Count < 2) {
+            if (_gameInProgress || _registeredPlayers.Count < 2) {
                 return;
             }
 
@@ -56,7 +62,12 @@ namespace NewKris.Runtime.PongServer {
         }
         
         private void PositionPlayer(PlayerController player) {
-            
+            if (_registeredPlayers.IndexOf(player) == 0) {
+                player.transform.position = player1Spawn.position;
+            }
+            else {
+                player.transform.position = player2Spawn.position;
+            }
         }
 
         private void StartGame() {

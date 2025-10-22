@@ -1,26 +1,29 @@
 using System;
+using System.Collections.Generic;
 using NewKris.Runtime.Common;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace NewKris.Runtime.PongClient {
-    public class PlayerController : NetworkBehaviour {
+    public class PlayerController : NetworkBehaviourExtended {
         public static event Action<PlayerController> OnPlayerSpawned;
+        public static List<PlayerController> players = new List<PlayerController>(2);
 
         private PlayerPawn _pawn;
 
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
             
-            NetworkAction.DoOnAll(() => {
+            DoOnAll(() => {
                 _pawn = gameObject.GetComponent<PlayerPawn>();
                 SetPlayerName();
+                players.Add(this);
             });
 
-            NetworkAction.DoOnOwner(this, NotifySpawnRpc);
+            DoOnOwner(NotifySpawnRpc);
         }
-
+        
         public void ReceiveMoveInput(InputAction.CallbackContext context) {
             UpdateMovementInputRpc(context.ReadValue<float>());
         }
