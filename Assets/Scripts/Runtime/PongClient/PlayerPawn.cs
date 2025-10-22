@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace NewKris.Runtime.PongClient {
@@ -6,13 +7,15 @@ namespace NewKris.Runtime.PongClient {
 
         private Vector2 _colliderSize;
         
-        public void Move(float direction) {
-            transform.position += Vector3.up * (direction * moveSpeed * Time.deltaTime);
-            transform.position = Bounds.ClampPosition(transform.position, _colliderSize);
-        }
+        public float MovementInput { get; set; }
 
         private void Awake() {
             _colliderSize = GetComponentInChildren<Collider2D>().bounds.size;
+        }
+
+        private void LateUpdate() {
+            transform.position += Vector3.up * (MovementInput * moveSpeed * Time.deltaTime);
+            transform.position = Bounds.ClampPosition(transform.position, _colliderSize);            
         }
     }
 }

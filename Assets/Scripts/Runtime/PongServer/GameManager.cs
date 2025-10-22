@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NewKris.Runtime.Common;
 using NewKris.Runtime.PongClient;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,18 +15,22 @@ namespace NewKris.Runtime.PongServer {
         
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
-
-            if (IsServer) {
+            
+            NetworkAction.DoOnServer(this, () => {
                 PlayerController.OnPlayerSpawned += RegisterPlayer;
-            }
+            });
+            
+            NetworkAction.DoOnClient(this, () => {
+                gameObject.SetActive(false);
+            });
         }
 
         public override void OnNetworkDespawn() {
             base.OnNetworkDespawn();
-
-            if (IsServer) {
+            
+            NetworkAction.DoOnServer(this, () => {
                 PlayerController.OnPlayerSpawned -= RegisterPlayer;
-            }
+            });
         }
 
         private void RegisterPlayer(PlayerController player) {

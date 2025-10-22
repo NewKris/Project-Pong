@@ -1,4 +1,5 @@
 using System;
+using NewKris.Runtime.Common;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 
@@ -17,11 +18,14 @@ namespace NewKris.Runtime.PongClient {
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
 
-            if (IsOwner) {
+            NetworkAction.DoOnOwner(this, () => {
                 playerInput.enabled = true;
                 playerController.enabled = true;
+            });
+
+            NetworkAction.DoOnServer(this, () => {
                 pawn.enabled = true;
-            }
+            });
         }
     }
 }
