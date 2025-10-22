@@ -1,22 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using NewKris.Runtime.PongClient;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace NewKris.Runtime.PongServer {
-    public class GameManager : MonoBehaviour {
+    public class GameManager : NetworkBehaviour {
         public Transform player1Spawn;
         public Transform player2Spawn;
 
         private bool _gameInProgress;
         private List<PlayerController> _players = new List<PlayerController>(2);
         
-        private void Awake() {
-            PlayerController.OnPlayerSpawned += RegisterPlayer;
+        public override void OnNetworkSpawn() {
+            base.OnNetworkSpawn();
+
+            if (IsServer) {
+                PlayerController.OnPlayerSpawned += RegisterPlayer;
+            }
         }
 
-        private void OnDestroy() {
-            PlayerController.OnPlayerSpawned -= RegisterPlayer;
+        public override void OnNetworkDespawn() {
+            base.OnNetworkDespawn();
+
+            if (IsServer) {
+                PlayerController.OnPlayerSpawned -= RegisterPlayer;
+            }
         }
 
         private void RegisterPlayer(PlayerController player) {

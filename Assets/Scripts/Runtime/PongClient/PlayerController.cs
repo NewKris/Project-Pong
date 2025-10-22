@@ -6,20 +6,21 @@ namespace NewKris.Runtime.PongClient {
     public class PlayerController : NetworkBehaviour {
         public static event Action<PlayerController> OnPlayerSpawned;
 
+        private float _movement;
         private PlayerPawn _pawn;
-        private InputAction _moveAction;
 
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
             
             _pawn = gameObject.GetComponent<PlayerPawn>();
-            _moveAction = InputSystem.actions["Move"];
-            
-            InputSystem.actions.Enable();
+        }
+
+        public void Move(InputAction.CallbackContext context) {
+            _movement = context.ReadValue<float>();
         }
 
         private void Update() {
-            _pawn.Move(_moveAction.ReadValue<float>());
+            _pawn.Move(_movement);
         }
     }
 }
