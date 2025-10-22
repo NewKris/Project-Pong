@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace NewKris.Runtime {
+namespace NewKris.Runtime.PongClient {
     public class Bounds : MonoBehaviour {
         private static Bounds Instance;
         
@@ -21,7 +20,7 @@ namespace NewKris.Runtime {
         }
 
         private void OnDrawGizmos() {
-            Gizmos.color = Color.white;
+            Gizmos.color = Color.red;
             
             Vector2 p1 = new Vector2(int.MinValue, maxHeight);
             Vector2 p2 = new Vector2(int.MaxValue, maxHeight);

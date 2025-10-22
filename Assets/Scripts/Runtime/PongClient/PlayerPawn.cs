@@ -1,8 +1,6 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-namespace NewKris.Runtime {
+namespace NewKris.Runtime.PongClient {
     public class PlayerPawn : MonoBehaviour {
         public float moveSpeed;
 

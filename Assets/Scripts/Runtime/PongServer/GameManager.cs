@@ -1,9 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using NewKris.Runtime.PongClient;
 using UnityEngine;
 
-namespace NewKris.Runtime {
+namespace NewKris.Runtime.PongServer {
     public class GameManager : MonoBehaviour {
         public Transform player1Spawn;
         public Transform player2Spawn;
