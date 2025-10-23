@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using NewKris.Runtime.Common;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace NewKris.Runtime {
         public Transform player1Spawn;
         public Transform player2Spawn;
         public Ball ball;
+        public StatusText statusText;
         public float countDownDuration;
 
         private bool _gameInProgress;
@@ -24,6 +27,9 @@ namespace NewKris.Runtime {
                 PlayerController.OnPlayerSpawned += RegisterPlayer;
                 Goal.OnGoal += AwardPoint;
                 RegisterExistingPlayers();
+                
+                statusText.SetStatusTextRpc("Waiting for players");
+                statusText.SetPulseRpc(true);
             });
         }
 
@@ -74,24 +80,40 @@ namespace NewKris.Runtime {
         private IEnumerator RunStartRoundSequence() {
             _gameInProgress = true;
             
-            foreach (PlayerController registeredPlayer in _registeredPlayers) {
-                PositionPlayer(registeredPlayer);
-                registeredPlayer.SetMobilityRpc(false);
-            }
+            statusText.SetPulseRpc(false);
+            statusText.SetStatusTextRpc("Ready!");
+            
+            ForEachPlayer(player => {
+                PositionPlayer(player);
+                player.SetMobilityRpc(false);
+            });
             
             ball.ResetPosition();
             
             yield return CountDown();
             
-            foreach (PlayerController registeredPlayer in _registeredPlayers) {
-                registeredPlayer.SetMobilityRpc(true);
-            }
+            ForEachPlayer(player => player.SetMobilityRpc(true));
+            
+            statusText.SetStatusTextRpc("Go!");
 
+            yield return new WaitForSeconds(0.5f);
+            
+            statusText.SetStatusTextRpc("");
+            ball.Putt(GetRandomPuttDirection());
+        }
+
+        private void ForEachPlayer(Action<PlayerController> action) {
+            foreach (PlayerController registeredPlayer in _registeredPlayers) {
+                action(registeredPlayer);
+            }
+        }
+        
+        private Vector2 GetRandomPuttDirection() {
             float randAngle = Mathf.Lerp(30, 45, Random.value);
             Vector2 dir = _lastWinner == PlayerTeam.LEFT ? Vector2.left : Vector2.right;
             dir = Quaternion.AngleAxis(randAngle, Vector3.forward) * dir;
-            
-            ball.Putt(dir);
+
+            return dir;
         }
         
         private void PositionPlayer(PlayerController player) {
@@ -107,11 +129,12 @@ namespace NewKris.Runtime {
             float t = 0;
             float lastSecond = -0.5f;
             
-            while (t < countDownDuration) {
+            while (t < countDownDuration + 1) {
                 t += Time.deltaTime;
 
                 if (Mathf.Floor(t) > lastSecond) {
                     lastSecond += 1;
+                    statusText.SetStatusTextRpc(Mathf.FloorToInt(lastSecond).ToString());
                 }
                 
                 yield return null;
