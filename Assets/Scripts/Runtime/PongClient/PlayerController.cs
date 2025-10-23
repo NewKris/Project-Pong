@@ -12,9 +12,9 @@ namespace NewKris.Runtime.PongClient {
 
         private PlayerPawn _pawn;
 
-        [Rpc(SendTo.Everyone)]
+        [Rpc(SendTo.Server)]
         public void SetMobilityRpc(bool canMove) {
-            _pawn.enabled = canMove;
+            _pawn.CanMove = canMove;
         }
         
         public override void OnNetworkSpawn() {
@@ -22,7 +22,6 @@ namespace NewKris.Runtime.PongClient {
             
             DoOnAll(() => {
                 _pawn = gameObject.GetComponent<PlayerPawn>();
-                SetPlayerName();
             });
 
             DoOnServer(() => {
@@ -41,14 +40,6 @@ namespace NewKris.Runtime.PongClient {
 
         public void ReceiveMoveInput(InputAction.CallbackContext context) {
             UpdateMovementInputRpc(context.ReadValue<float>());
-        }
-
-        private void SetPlayerName() {
-            string currentMode = NetworkManager.Singleton.IsHost ? "Host" 
-                : NetworkManager.Singleton.IsServer ? "Server" 
-                : "Client";
-            
-            gameObject.name = $"{currentMode} Player";
         }
 
         private void NotifySpawn() {
