@@ -35,7 +35,7 @@ namespace NewKris.Runtime {
         }
 
         private string CreateDots() {
-            int dotsCount = Mathf.FloorToInt(Time.time % 3);
+            int dotsCount = Mathf.FloorToInt(Time.time % 4);
             return new string('.', dotsCount);
         }
     }
