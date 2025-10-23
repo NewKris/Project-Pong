@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class Bounds : MonoBehaviour {
         private static Bounds Instance;
         

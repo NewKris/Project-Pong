@@ -2,7 +2,7 @@ using NewKris.Runtime.Common;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class Ball : NetworkBehaviourExtended {
         public Vector2 startPosition;
         public float maxSpeed;

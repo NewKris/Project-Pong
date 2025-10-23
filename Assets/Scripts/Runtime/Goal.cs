@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public enum PlayerTeam {
         LEFT,
         RIGHT

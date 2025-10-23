@@ -1,8 +1,7 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class NetworkDebugPanel : MonoBehaviour {
         private void OnGUI() {
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));

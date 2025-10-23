@@ -1,9 +1,7 @@
-using System;
 using NewKris.Runtime.Common;
-using Unity.Netcode;
 using UnityEngine.InputSystem;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class OwnerFilter : NetworkBehaviourExtended {
         public PlayerInput playerInput;
         public PlayerController playerController;

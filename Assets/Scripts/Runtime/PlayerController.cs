@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using NewKris.Runtime.Common;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class PlayerController : NetworkBehaviourExtended {
         public static event Action<PlayerController> OnPlayerSpawned;
         public static readonly List<PlayerController> Players = new List<PlayerController>(2);

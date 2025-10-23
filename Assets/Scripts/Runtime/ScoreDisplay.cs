@@ -1,10 +1,8 @@
-using System;
 using System.Globalization;
-using NewKris.Runtime.PongServer;
 using TMPro;
 using UnityEngine;
 
-namespace NewKris.Runtime.PongClient {
+namespace NewKris.Runtime {
     public class ScoreDisplay : MonoBehaviour {
         public PlayerTeam showTeamScore;
 

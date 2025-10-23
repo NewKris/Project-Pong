@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using NewKris.Runtime.Common;
-using NewKris.Runtime.PongClient;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace NewKris.Runtime.PongServer {
+namespace NewKris.Runtime {
     public class GameManager : NetworkBehaviourExtended {
         public static readonly NetworkVariable<float> LeftScore = new NetworkVariable<float>(0);
         public static readonly NetworkVariable<float> RightScore = new NetworkVariable<float>(0);
