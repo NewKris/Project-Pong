@@ -15,12 +15,12 @@ namespace NewKris.Runtime {
         public TMP_InputField joinCodeInput;
         public LoadingButton[] loadingButtons;
         
-        public void HostGame() {
-            StartCoroutine(StartHostAsync());
+        public async void HostGame() {
+            await StartHostAsync();
         }
 
-        public void JoinGame() {
-            StartCoroutine(StartClientAsync());
+        public async void JoinGame() {
+            await StartClientAsync();
         }
 
         public void ExitGame() {
@@ -35,52 +35,38 @@ namespace NewKris.Runtime {
             ResetLoadingButtons();
         }
 
-        private IEnumerator StartClientAsync() {
-            yield return ClientSession.WaitForNetworkInstantiation();
+        private async Task StartClientAsync() {
+            try {
+                JoinAllocation allocationTask = await RelayService.Instance.JoinAllocationAsync(joinCodeInput.text);
+                
+                RelayServerData serverData = allocationTask.ToRelayServerData("dtls");
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(serverData);
             
-            Task<JoinAllocation> allocationTask = RelayService.Instance.JoinAllocationAsync(joinCodeInput.text);
-            yield return WaitForTask(allocationTask);
-
-            if (!allocationTask.IsCompletedSuccessfully) {
-                Debug.LogError("Failed to join Relay Server");
-                ResetLoadingButtons();
-                yield break;
+                NetworkManager.Singleton.StartClient();
             }
-            
-            RelayServerData serverData = allocationTask.Result.ToRelayServerData("dtls");
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(serverData);
-            
-            NetworkManager.Singleton.StartClient();
+            catch (Exception e) {
+                Debug.LogError($"Failed to start Client: {e.Message}");
+                ResetLoadingButtons();
+            }
         }
 
-        private IEnumerator StartHostAsync() {
-            yield return ClientSession.WaitForNetworkInstantiation();
-
-            Task<Allocation> allocationTask = RelayService.Instance.CreateAllocationAsync(2);
-            yield return WaitForTask(allocationTask);
-
-            if (!allocationTask.IsCompletedSuccessfully) {
-                Debug.LogError("Failed to secure allocation from RelayService");
-                ResetLoadingButtons();
-                yield break;
+        private async Task StartHostAsync() {
+            try {
+                Allocation allocationTask = await RelayService.Instance.CreateAllocationAsync(2);
+                
+                RelayServerData serverData = allocationTask.ToRelayServerData("dtls");
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(serverData);
+                
+                string joinCodeTask = await RelayService.Instance.GetJoinCodeAsync(allocationTask.AllocationId);
+                SessionCodeDisplay.SetSessionCode(joinCodeTask);
+                
+                NetworkManager.Singleton.StartHost();
+                NetworkManager.Singleton.SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
             }
-
-            RelayServerData serverData = allocationTask.Result.ToRelayServerData("dtls");
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(serverData);
-            
-            Task<string> joinCodeTask = RelayService.Instance.GetJoinCodeAsync(allocationTask.Result.AllocationId);
-            yield return WaitForTask(joinCodeTask);
-
-            if (!joinCodeTask.IsCompletedSuccessfully) {
-                Debug.LogError("Failed to get join code from RelayService");
+            catch (Exception e) {
+                Debug.LogError($"Failed to start Host: {e.Message}");
                 ResetLoadingButtons();
-                yield break;
             }
-            
-            SessionCodeDisplay.SetSessionCode(joinCodeTask.Result);
-            
-            NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
         }
 
         private IEnumerator WaitForTask<T>(Task<T> task) {
