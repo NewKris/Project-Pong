@@ -1,10 +1,11 @@
 using System;
+using NewKris.Runtime.Common;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace NewKris.Runtime {
-    public class StatusText : NetworkBehaviour {
+    public class StatusText : NetworkBehaviourExtended {
         private TextMeshProUGUI _text;
 
         private bool _pulsing;
@@ -21,7 +22,14 @@ namespace NewKris.Runtime {
             _baseText = text;
             _text.text = text;
         }
-        
+
+        public override void OnNetworkSpawn() {
+            DoOnServer(() => {
+                SetStatusTextRpc("Waiting for players");
+                SetPulseRpc(true);
+            });
+        }
+
         private void Awake() {
             _text = GetComponent<TextMeshProUGUI>();
         }

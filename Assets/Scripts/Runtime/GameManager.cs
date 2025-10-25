@@ -27,9 +27,6 @@ namespace NewKris.Runtime {
                 PlayerController.OnPlayerSpawned += RegisterPlayer;
                 Goal.OnGoal += AwardPoint;
                 RegisterExistingPlayers();
-                
-                statusText.SetStatusTextRpc("Waiting for players");
-                statusText.SetPulseRpc(true);
             });
         }
 

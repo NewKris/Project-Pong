@@ -8,6 +8,10 @@ namespace NewKris.Runtime {
         public float minHeight;
 
         public static Vector2 ClampPosition(Vector2 position, Vector2 colliderSize) {
+            if (!Instance) {
+                return position;
+            }
+            
             float maxOffset = Instance.maxHeight - colliderSize.y * 0.5f;
             float minOffset = Instance.minHeight + colliderSize.y * 0.5f;
             
