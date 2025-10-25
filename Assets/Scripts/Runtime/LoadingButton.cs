@@ -1,17 +1,20 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace NewKris.Runtime {
     public class LoadingButton : MonoBehaviour {
-        public Transform loadingOverlay;
+        public GameObject loadingOverlay;
+        public UnityEvent onClick;
 
-        public void SetLoading(bool isLoading) {
-            loadingOverlay.gameObject.SetActive(isLoading);
+        public void ResetState() {
+            loadingOverlay.SetActive(false);
         }
-
-        public void AddListener(Action callback) {
-            GetComponent<Button>().onClick.AddListener(() => callback());
+        
+        public void Invoke() {
+            loadingOverlay.SetActive(true);
+            onClick.Invoke();
         }
     }
 }
