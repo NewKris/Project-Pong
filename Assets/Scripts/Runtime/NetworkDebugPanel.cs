@@ -1,9 +1,26 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace NewKris.Runtime {
     public class NetworkDebugPanel : MonoBehaviour {
+        private bool _display = false;
+
+        private void Awake() {
+            InputSystem.actions["Toggle Debug"].performed += _ => _display = !_display;
+            InputSystem.actions.actionMaps[1].Enable();
+        }
+
+        private void OnDestroy() {
+            InputSystem.actions["Toggle Debug"].Dispose();
+        }
+
         private void OnGUI() {
+            if (!_display) {
+                return;
+            }
+            
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));
 
             if (!NetworkExists()) {
