@@ -14,7 +14,6 @@ namespace NewKris.Runtime {
 
         public void JoinGame() {
             NetworkManager.Singleton.StartClient();
-            //NetworkManager.Singleton.SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
         }
 
         public void ExitGame() {

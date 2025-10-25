@@ -253,63 +253,51 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7454044917407321897, guid: 3ff8d2e6c6458804091fec204f285dda, type: 3}
   m_PrefabInstance: {fileID: 165222256}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &541478161
-PrefabInstance:
+--- !u!1 &535997002
+GameObject:
   m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 535997004}
+  - component: {fileID: 535997003}
+  m_Layer: 0
+  m_Name: Network Instantiator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &535997003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535997002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16856da955df4efdaec68ce0c1eaac75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewKris.Runtime.NetworkInstantiator
+  networkPrefab: {fileID: 4192887142350368814, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
+--- !u!4 &535997004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535997002}
   serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4192887142350368814, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_Name
-      value: Network Manager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474440884177022993, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e94e0e17830278c458ad5dcd4277a5cd, type: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &578713021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1893,4 +1881,4 @@ SceneRoots:
   - {fileID: 578713024}
   - {fileID: 2054116467}
   - {fileID: 1536225219}
-  - {fileID: 541478161}
+  - {fileID: 535997004}
